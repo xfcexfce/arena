@@ -1,7 +1,10 @@
 package com.example.arena;
 
+import lombok.Getter;
+
 import java.util.*;
 
+@Getter
 public class Creature implements Fightable {
 
     CreatureType creatureType;
@@ -32,30 +35,8 @@ public class Creature implements Fightable {
         return totalValueOfSDDEL;
     }
 
-    //gettery sa public - to poprawne??
-    public Integer getStrength() {
-        return strength;
-    }
+    //gettery sa public - to poprawne??  ---  te strzaleczki tutaj pokazuja metody od uzycia Lomboka ???
 
-    public CreatureType getCreatureType() {
-        return creatureType;
-    }
-
-    public Integer getDexterity() {
-        return dexterity;
-    }
-
-    public Integer getDefence() {
-        return defence;
-    }
-
-    public Integer getEndurance() {
-        return endurance;
-    }
-
-    public Integer getLifePoints() {
-        return lifePoints;
-    }
 
 
     public Creature(CreatureType creatureType, Integer strength, Integer dexterity, Integer defence, Integer endurance, Integer lifePoints) {

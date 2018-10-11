@@ -9,6 +9,10 @@ public class RandomName {
     @Autowired
     UtilitiesMain random = new UtilitiesMain();
 
+
+    //w sumie bardziej poprawnie jest miec tu tylo deklaracje Utilities random zamiast tego co wyzej
+    // bo wtedy Springiem mozna sie przelaczac pomiedzy Utilities main i backup??
+
 //to zyje do konca dzialania programu??
         final static LinkedList<String> listOfUsedNames = new LinkedList<>();
 
