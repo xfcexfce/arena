@@ -8,20 +8,22 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class CreatureFactory {
     @Autowired
-    Utilities random;
+    UtilitiesMain random = new UtilitiesMain();
 
-    CreatureType randomCreatureType() {
+    //bez dodaania = new UtilitiesMain(); nie wiedzial co ma zrobic i byla 500
+
+    public CreatureType randomCreatureType() {
         CreatureType allResults[] = CreatureType.values();
         return allResults[ThreadLocalRandom.current().nextInt(allResults.length)];
     }
 
-    Creature randomCreature() {
+    public Creature randomCreature() {
         Creature randomCreature = new Creature(randomCreatureType(), random.random(1, 10), random.random(1, 10),
                 random.random(1, 10), random.random(1, 10), random.random(1, 10));
         return randomCreature;
     }
 
-    LinkedList<Creature> randomCreatureList(int listSize) {
+    public LinkedList<Creature> randomCreatureList(int listSize) {
         LinkedList<Creature> creaturesList = new LinkedList<>();
         for (int x = 0; x < listSize; x++) {
             creaturesList.add(randomCreature());

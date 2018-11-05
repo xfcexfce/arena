@@ -20,6 +20,18 @@ public class LambdaExcercises {
         }
     }
 
+    public LinkedList<Creature> sortByNumberOfWins(LinkedList<Creature> listOfCreatures) {
+        LinkedList<Creature> sortByNumberOfWins = listOfCreatures;
+        sortByNumberOfWins.sort(Comparator.comparing(Creature::getNumberOfWins)
+                //.thenComparing(Creature::getLifePoints)
+                .reversed());
+        for (int i = 0; i < sortByNumberOfWins.size(); i++) {
+            Creature currentCreature = sortByNumberOfWins.get(i);
+            System.out.println(currentCreature.toString());
+        }
+        return sortByNumberOfWins;
+    }
+
     public Creature creatureWithMaxPoints(LinkedList<Creature> listOfCreatures) {
         LinkedList<Creature> sortedList = listOfCreatures;
         for (int i = 0; i< listOfCreatures.size(); i++){

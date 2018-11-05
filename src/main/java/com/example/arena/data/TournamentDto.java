@@ -6,14 +6,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
-@Entity //oznacza ze ma byc zapis do bazy
-@Data //robi geter i setery kostruktory
+
+@Data //robi geter i setery kostruktory data transfer object
 public class TournamentDto {
-    @Id //tworzy kolumny id i generatedvalues i capacity i points
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
 
+    private Integer id;
+    @NotNull
+    @Min(value = 2, message = "minimalna liczba zawodnikow to 2")
+    @Max(20)
     private Integer capacity;
     private Integer points;
 

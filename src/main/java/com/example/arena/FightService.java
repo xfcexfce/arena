@@ -1,11 +1,24 @@
 
 package com.example.arena;
 
+import com.example.arena.data.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
+@Service
 public class FightService {
+
+    @Autowired
+    TournamentRepository tournamentRepository;
+
+    @Autowired
+    CreatureRepository creatureRepository;
 
     public LinkedList<FightResult> fight(Creature c1, Creature c2) {
         LinkedList<FightResult> fightResultList = new LinkedList<>();
@@ -37,7 +50,7 @@ public class FightService {
         return fightResultList;
     }
 
-    List<Creature[]> listOfPairs(LinkedList<Creature> listOfCreatures) {
+    public List<Creature[]> listOfPairs(LinkedList<Creature> listOfCreatures) {
         List<Creature[]> pairs = new ArrayList<>();
         for (int i = 0; i < listOfCreatures.size(); ++i)
             for (int j = i + 1; j < listOfCreatures.size(); ++j)
@@ -45,7 +58,7 @@ public class FightService {
         return pairs;
     }
 
-    LinkedList<FightResult> singleTournament(List<Creature[]> listOfPairs) {
+    public LinkedList<FightResult> singleTournament(List<Creature[]> listOfPairs) {
         LinkedList<FightResult> singleTournament = new LinkedList<>();
         for (int i = 0; i < listOfPairs.size(); i++) {
             Creature[] cpair = listOfPairs.get(i);
@@ -60,5 +73,101 @@ public class FightService {
             singleTournament.add(lastFightResult);
         }
         return singleTournament;
+    }
+
+    public List<TournamentDto> allTournaments() {
+        Iterable<TournamentEntity> all = tournamentRepository.findAll();
+        LinkedList<TournamentDto> result = new LinkedList<>();
+        Iterator<TournamentEntity> iterator = all.iterator();
+        all.forEach(tournamentEntity -> result.add(entityToDto(tournamentEntity)));
+        /*all.forEach(new Consumer<TournamentEntity>() {
+            @Override
+            public void accept(TournamentEntity tournamentEntity) {
+                result.add(entityToDto(tournamentEntity));
+            }
+        });
+        while (iterator.hasNext()) {
+            TournamentEntity entity = iterator.next();
+            TournamentDto dto = entityToDto(entity);
+            result.add(dto);
+        }*/
+        return result;
+
+    }
+
+    public TournamentDto singleTournament(int id) {
+        Iterable<TournamentEntity> all = tournamentRepository.findAll();
+        //jak chcialem zrobic bez listy to nie dialalo... :/
+        LinkedList<TournamentDto> result = new LinkedList<>();
+        TournamentDto singleResult = new TournamentDto();
+        /* all.forEach(new Consumer<TournamentEntity>() {
+            @Override
+            public void accept(TournamentEntity tournamentEntity) {
+                if (tournamentEntity.getId() == id) {
+                    result.add(entityToDto(tournamentEntity));
+                    TournamentDto singleR = entityToDto(tournamentEntity);
+                    //singleResult = singleR; //???
+                }
+            }
+        });*/
+
+        Iterator<TournamentEntity> iterator = all.iterator();
+        //all.forEach(tournamentEntity -> result.add(entityToDto(tournamentEntity)));
+
+        while (iterator.hasNext()) {
+            TournamentEntity entity = iterator.next();
+            TournamentDto dto = entityToDto(entity);
+            if (entity.getId() == id){
+                singleResult = dto;
+                result.add(dto);
+            }
+        }
+        return singleResult;
+        //return result.getFirst();
+
+    }
+
+    public TournamentDto createTournament(TournamentDto tournamentDto) {
+        TournamentEntity tournamentEntity = dtoToEntity(tournamentDto);
+        TournamentEntity saved = tournamentRepository.save(tournamentEntity);
+        TournamentDto result = entityToDto(saved);
+        return result;
+    }
+
+    public CreatureDto createCreature(CreatureDto creatureDto) {
+        CreatureEntity creatureEntity = dtoToEntity(creatureDto);
+        CreatureEntity saved = creatureRepository.save(creatureEntity);
+        CreatureDto result = entityToDto(saved);
+        return result;
+    }
+
+    public TournamentEntity dtoToEntity(TournamentDto tournamentDto) {
+        TournamentEntity tournamentEntity = new TournamentEntity();
+        tournamentEntity.setCapacity(tournamentDto.getCapacity());
+        tournamentEntity.setPoints(tournamentDto.getPoints());
+        return tournamentEntity;
+    }
+
+    public TournamentDto entityToDto(TournamentEntity entity) {
+        TournamentDto dto = new TournamentDto();
+        dto.setCapacity(entity.getCapacity());
+        dto.setPoints(entity.getPoints());
+        dto.setId(entity.getId());
+        return dto;
+    }
+
+    public CreatureEntity dtoToEntity(CreatureDto creatureDto) {
+        CreatureEntity creatureEntity = new CreatureEntity();
+        creatureEntity.setName(creatureDto.getName());
+        creatureEntity.setDefence(creatureDto.getDefence());
+        return creatureEntity;
+    }
+
+    public CreatureDto entityToDto(CreatureEntity entity) {
+        CreatureDto dto = new CreatureDto();
+        dto.setName(entity.getName());
+        dto.setDefence(entity.getDefence());
+        dto.setId(entity.getId());
+        return dto;
     }
 }
